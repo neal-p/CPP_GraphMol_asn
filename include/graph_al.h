@@ -2,7 +2,6 @@
 
 #include "graph_base.h"
 
-
 class Graph_AL : public GraphBase {
  public:
   std::vector<std::vector<int>> adj_;
@@ -21,7 +20,7 @@ class Graph_AL : public GraphBase {
       adj_.push_back(neighbors);
     }
 
-       // fill in the edges from the passed in pairs
+    // fill in the edges from the passed in pairs
     int edge_id = 0;
     for (auto edge : edges) {
       if (edge.first >= n_vertices_ || edge.second >= n_vertices_) {
@@ -38,95 +37,87 @@ class Graph_AL : public GraphBase {
     }
   }
 
-  int addEdge(std::pair<int, int> edge){
+  int addEdge(std::pair<int, int> edge) {
+    edges_.push_back(edge);
 
-      edges_.push_back(edge);
+    edge_ids_[edge] = n_edges_;
+    if (!directed_) {
+      edge_ids_[std::pair<int, int>(edge.second, edge.first)] = n_edges_;
+    }
 
-      edge_ids_[edge] = n_edges_;
-       if (!directed_) {
-        edge_ids_[std::pair<int, int>(edge.second, edge.first)] = n_edges_;
-      }
-     
-      n_edges_ ++;
-      adj_[edge.first].push_back(edge.second);
-      if (!directed_) {
-        adj_[edge.second].push_back(edge.first);
+    n_edges_++;
+    adj_[edge.first].push_back(edge.second);
+    if (!directed_) {
+      adj_[edge.second].push_back(edge.first);
     }
     return n_edges_ - 1;
-}
+  }
 
-int addEdge(int start, int end){
-        return addEdge(std::pair<int, int>(start, end));
+  int addEdge(int start, int end) {
+    return addEdge(std::pair<int, int>(start, end));
+  }
+
+  int addVertex() {
+    // Add new vertex to count
+    n_vertices_++;
+
+    // add empty attribute for each attribute
+    for (auto it = v_attr_.begin(); it != v_attr_.end(); it++) {
+      // We can clone the first Vertex's attribute
+      // which we will create a default value version
+      auto first_attr = it->second[0];
+      auto cloned = first_attr->clone();
+      it->second.push_back(cloned);
     }
 
+    // Add empty adjacency list
+    std::vector<int> neighbors;
+    adj_.push_back(neighbors);
 
-     int addVertex(){
-        // Add new vertex to count
-        n_vertices_ ++;
-
-        // add empty attribute for each attribute
-        for (auto it = v_attr_.begin(); it != v_attr_.end(); it++){
-            // We can clone the first Vertex's attribute
-            // which we will create a default value version
-            auto first_attr = it->second[0];
-            auto cloned = first_attr->clone();
-            it->second.push_back(cloned);
-        }
-
-        // Add empty adjacency list
-        std::vector<int> neighbors; 
-        adj_.push_back(neighbors);
-
-        return n_vertices_ - 1;
-    }
+    return n_vertices_ - 1;
+  }
 
   std::vector<int> getNeighbors(int v) { return adj_[v]; }
 };
 
+Graph_AL make_Graph_AL(const std::string& file) {
+  int n_vertices;
+  int id;
+  int n_bonds;
+  int total_bonds;
+  int source;
+  int dest;
+  std::string atom_type;
+  std::ifstream f(file);
+  if (!f) {
+    std::cout << "Error opening file! " << file << std::endl;
+    throw std::runtime_error("Couldnt read file");
+  }
 
+  // Get number of atoms as first line
+  f >> n_vertices;
+  std::vector<std::string> atom_types(n_vertices);
 
-Graph_AL make_Graph_AL(const std::string &file){
+  for (int l = 0; l < n_vertices; l++) {
+    f >> id;
+    f >> atom_type;
+    f >> n_bonds;
+    atom_types[id] = atom_type;
+  }
 
-    int n_vertices;
-    int id;
-    int n_bonds;
-    int total_bonds;
-    int source;
-    int dest;
-    std::string atom_type;
-    std::ifstream f(file);
-    if (!f){
-        std::cout << "Error opening file! " << file << std::endl;
-        throw std::runtime_error("Couldnt read file");
-    }
+  // Number of bonds
+  f >> total_bonds;
+  std::vector<std::pair<int, int>> edges;
+  edges.reserve(total_bonds);
 
-        // Get number of atoms as first line
-        f >> n_vertices;
-        std::vector<std::string> atom_types(n_vertices);
+  for (int b = 0; b < total_bonds; b++) {
+    f >> source;
+    f >> dest;
+    edges.push_back({source, dest});
+  }
 
-        for (int l=0; l < n_vertices; l++){
-            f >> id;
-            f >> atom_type;
-        f >> n_bonds;
-        atom_types[id] = atom_type;
-    }
+  Graph_AL g = Graph_AL(n_vertices, edges, false);
+  g.addVertexAttributes<std::string>("atom_type", atom_types);
 
-      // Number of bonds
-      f >> total_bonds;
-      std::vector<std::pair<int, int>> edges;
-      edges.reserve(total_bonds);
-
-      for (int b=0; b < total_bonds; b++){
-        f >> source;
-        f >> dest;
-        edges.push_back({source, dest});
-    }
-
-    Graph_AL g = Graph_AL(n_vertices, edges, false);
-    g.addVertexAttributes<std::string>("atom_type", atom_types);
-
-    return g;
-    }
-
-
-
+  return g;
+}
