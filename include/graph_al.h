@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <fstream>
 
 #include "graph_base.h"
@@ -80,6 +81,18 @@ class Graph_AL : public GraphBase {
   std::vector<int> getNeighbors(int v) { return adj_[v]; }
 };
 
+// Found that we need to clean up the atom types
+void cleanString(std::string& atom) {
+  // std::cout << "before: " << atom << std::endl;
+
+  // Remove non-alphabetic ASCII characters
+  atom.erase(std::remove_if(atom.begin(), atom.end(),
+                            [](unsigned char c) { return !std::isalpha(c); }),
+             atom.end());
+
+  // std::cout << "after: " << atom << std::endl;
+}
+
 Graph_AL make_Graph_AL(const std::string& file) {
   int n_vertices;
   int id;
@@ -101,8 +114,11 @@ Graph_AL make_Graph_AL(const std::string& file) {
   for (int l = 0; l < n_vertices; l++) {
     f >> id;
     f >> atom_type;
+    // need to remove quotes
+    cleanString(atom_type);
     f >> n_bonds;
     atom_types[id] = atom_type;
+    atom_type.clear();
   }
 
   // Number of bonds

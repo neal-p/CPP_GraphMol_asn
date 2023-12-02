@@ -74,12 +74,14 @@ class Graph_AM : public GraphBase {
     }
 
     // Add to adjecency matrix
-    for (auto row : adj_) {
+    for (auto& row : adj_) {
       row.push_back(0);
     }
 
     std::vector<int> empty(n_vertices_, 0);
     adj_.push_back(empty);
+
+    return n_vertices_ - 1;
   }
 
   std::vector<int> getNeighbors(int v) {
@@ -94,6 +96,15 @@ class Graph_AM : public GraphBase {
       }
     }
     return neighbors;
+  }
+
+  void printAM() {
+    for (auto row : adj_) {
+      for (auto edge : row) {
+        std::cout << edge << " ";
+      }
+      std::cout << std::endl;
+    }
   }
 };
 
@@ -118,6 +129,9 @@ Graph_AM make_Graph_AM(const std::string& file) {
   for (int l = 0; l < n_vertices; l++) {
     f >> id;
     f >> atom_type;
+    // need to remove quotes
+    atom_type.erase(0, 1);
+    atom_type.erase(atom_type.size() - 1);
     f >> n_bonds;
     atom_types[id] = atom_type;
   }

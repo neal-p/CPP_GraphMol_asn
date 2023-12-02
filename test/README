@@ -1,0 +1,21 @@
+# University of California, Berkeley
+# Chem 274B: Software Engineering Fundamentals for Molecular Sciences
+# September 2023
+# 
+# Creator:  Patrick Neal
+# Date Created: 12-02-2023
+# Last Updated: 12-02-2023
+# Directory Path: test
+
+LIST OF SUBDIRECTORIES IN THIS DIRECTORY:
+(no subdirectories)
+
+LIST OF FILES IN THIS DIRECTORY:
+- README: (this file) contains general information of this directory
+- test_octane.cpp: test proper parsing and graph structure of octane
+- test_ethane.cpp: test proper parsing and graph structure of ethane
+- test_graph_al_directed.cpp: test for adjacency list directed graph
+- test_graph_am_directed.cpp:  test for adjacency matrix directed graph
+- test_graph_al_undirected.cpp: test for adjacency list undirected graph
+- test_graph_am_undirected.cpp: test for adjacency matrix undirected graph
+- Makefile: Contains targets for each test program, all of which can be made with `make all`

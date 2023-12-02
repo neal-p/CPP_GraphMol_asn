@@ -32,16 +32,44 @@ BIN_DIR     = ../bin
 
 # The next line contains a list of executable object files 
 # created by this Makefile.
-#SORT_EXECUTABLES = 
+TESTS = test_graph_al_directed test_graph_al_undirected test_graph_am_directed test_graph_am_undirected test_ethane test_octane
 
-test_graph: test_graph.cpp
-	$(CPP) $(CPPFLAGS) test_graph.cpp \
-	-o $(BIN_DIR)/test_graph \
+test_graph_al_directed: test_graph_al_directed.cpp
+	$(CPP) $(CPPFLAGS) test_graph_al_directed.cpp \
+	-o $(BIN_DIR)/test_graph_al_directed \
+	-I$(INC_DIR) \
+
+test_graph_al_undirected: test_graph_al_undirected.cpp
+	$(CPP) $(CPPFLAGS) test_graph_al_undirected.cpp \
+	-o $(BIN_DIR)/test_graph_al_undirected \
+	-I$(INC_DIR) \
+
+test_graph_am_directed: test_graph_am_directed.cpp
+	$(CPP) $(CPPFLAGS) test_graph_am_directed.cpp \
+	-o $(BIN_DIR)/test_graph_am_directed \
+	-I$(INC_DIR) \
+
+test_graph_am_undirected: test_graph_am_undirected.cpp
+	$(CPP) $(CPPFLAGS) test_graph_am_undirected.cpp \
+	-o $(BIN_DIR)/test_graph_am_undirected \
 	-I$(INC_DIR) \
 
 
-#all: $(SORT_EXECUTABLES)
+test_ethane: test_ethane.cpp
+	$(CPP) $(CPPFLAGS) test_ethane.cpp \
+	-o $(BIN_DIR)/test_ethane \
+	-I$(INC_DIR) \
+
+
+test_octane: test_octane.cpp
+	$(CPP) $(CPPFLAGS) test_octane.cpp \
+	-o $(BIN_DIR)/test_octane \
+	-I$(INC_DIR) \
+
+
+
+all: $(TESTS)
 
 cleanall:
-	cd $(BIN_DIR); rm $(EXECUTABLES)
+	cd $(BIN_DIR); rm $(TESTS)
 

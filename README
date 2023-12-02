@@ -1,39 +1,20 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/fhU6yXu9)
 # University of California, Berkeley
-# Chem 274B: Software Engineering Fundamentals for
-#            Molecular Sciences 
-# October 2023
-
+# Chem 274B: Software Engineering Fundamentals for Molecular Sciences
+# September 2023
 # 
-# Creator:  <"student's name goes here">
-# Date Created: November, 2023
-# Directory Path: Assignment4/
-
-This is the main directory for Assigment #4 Graph algorithms
-and optional matrix-matrix multiplication.
+# Creator:  Patrick Neal
+# Date Created: 12-02-2023
+# Last Updated: 12-02-2023
+# Directory Path: .
 
 LIST OF SUBDIRECTORIES IN THIS DIRECTORY:
-Students need to create the following subdirectories for this Assigment:
-- Bin/ 
-- Lib/ 
-- Include/
-- Source/ 
-- Source/Datatypes/ (place here your Graph data structures)
-- Source/Math (place here your matrix-matrix sequential and parallel
-		implementations)
-- Tests/ (test the functionality you develop)
-- Utils/ (include some relevant utilities from previous modules)
+- include: Contains templetized class definitions for GraphBase, Graph_AL, Graph_AM that are the solutions to the problemset
+- test: Contains tests to ensure proper implementation of basic graph functionality and molecule parsing
+- bin: All test executables will be placed in this directory 
 
 LIST OF FILES IN THIS DIRECTORY:
-- README (this file - make sure you add your own comments here)
-
-- Makefile: <students create makefiles for Assignment 4>
-- ethane.txt - test file #1 for problem 1
-- octane.txt - test file #2 for problem 1
-
-#	- Students need to also place their Answers-Assignment4.pdf 
-#	  file in this directory
-
-# Updates:
-- <student's name> report any updates to this directory 
-	
+- README: (this file) contains general information of this directory
+- Answers-Assignment4.md: Answers to assignment questions
+- ethane.txt: Graph of ethane molecule
+- Assignment_4_Instructions.pdf: Assignment instructions
+- octane.txt:  Graph of octane molecule
