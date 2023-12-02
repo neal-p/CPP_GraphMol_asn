@@ -70,7 +70,40 @@ All tests can me compiled to executable files placed in the `bin` directory by i
 
 #### 1.1.4
 
-THIS IS IMPORTANT DO LAST
+The two classes `Graph_AM` and `Graph_AL` both accomplish the same graph operations, but they have contrasting strengths and weaknesses in terms of memory and temporal efficiency.
+
+There are 4 different aspects that I will discuss for each paradigm:
+  1. memory required to store edges
+  2. complexity of neighbor lookup
+  3. complexity of edge query
+  4. storing edge weights
+
+  In general, the analysis is more complex than our standard big O notation analysis since there are two important factors, the number of vertices and number of edges. Both of these input characteristics will be discussed.
+
+##### Adjacency List
+
+
+Foremost, the memory requirements for storing adjacency list is heavily dependent on the number of vertices in the graph. For graphs with many vertices but few edges, this method is very efficient because it only stores the neighbors for each vertex, rather than the relationship between all vertices. As the number of edges increases to be a complete graph, we approach the same (or worse) memory requirements as the adjacency matrix. I say potentially worse because the adjacency matrix may be more optimized than I have implemented here.
+The time complexity to retrieve the neighbors for a particular vertex is O(1) for the adjacency list. This is because the list of neighbors is stored directly at the index of that vertex. Therefore, it is a direct lookup. This makes adjacency list a very good choice if the majority of operations will be finding neighbors.
+In contrast, to check if an edge exists between two vertices is an O(n) operation. This is because we must first lookup the neighbor list, O(1), then iterate over all those neighbors to see if the desired other vertex is in the neighbor list, an O(n) type operation. This means the adjacency list is not ideal for types of problems where we want to ask if two vertices are neighbors frequently.
+Lastly, to store edge weights in an adjacency list requires an additional datastructure. This could come in many forms, such as storing a special `Edge` class in the adjacency lists, using a `std::pair`, or forcing the weight to be a normal edge attribute stored in a completley separate list keyed by the edges id. But, all of these solutions are not as memory or time efficient as storing them as the value in an adjacency matrix directly.
+
+##### Adjacency Matric
+
+
+Foremost, the memory requirements for storing an adjacency matrix is always O(n^2) based on the number of vertices. Though there are more possibilities for optimization here than for an adjacency list. For example, since we know the matrix is square, we could store just the upper triangle, or at least improve data locality by using a block of memory to store the entire matrix. This would improve both the spacial efficiency as well as potentially improve timings as well if the caching is significant.
+The time complexity to retrieve the neighbors for a particular vertex is O(n) where n is the number of vertices. This is because we need to check the given row of the adjacency matrix for non-zero elements to find the neighbors. Therefore, we must always check over every other vertex. Therefore, applications that must retrieve the neighbors for a vertex often are not well suited for adjacency matrix.
+The time to query an edge is the opposite; The lookup on whether there is an edge between two vertices is an O(1) operation since it is simply a lookup in the matrix. 
+Lastly, storing the data as an adjacency matrix provides a very straightforward way to incorporate edge weights directly with the edges. Here, the weight can simply be the value stored in the matrix. Unlike adjacency lists, this means there is no need for an external datastructure to store weights, providing certaintly better memory efficiency, and potentially better timing as well.
+
+
+##### In summary: 
+    The adjacency list's best case scenario is when we want quick neighbor lookups on relatively sparse graphs. 
+    The adjacency matrix's best case scenario is for fast edge queries on dense graphs. 
+
+The developer should analyze their use case to see which type of graph operation is most common and choose the paradigm that best suits that use case. 
+
+Generally, most chemical structure graphs are not dense. Thinking in the organic space, typically vertices will have at most `4` edges, and typically the types of algorithms used on molecules (fingerprinting, substructure search, walking the graph) all rely on getting a vertices neighbors. Therefore, these applications likely favor the adjacency list approach.
 
 
 ### 1.2 Breadth First Search (BFS)
