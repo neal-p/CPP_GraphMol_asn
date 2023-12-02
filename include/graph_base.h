@@ -37,6 +37,22 @@ class GraphBase {
         edges_(edges),
         directed_(directed) {}
 
+  ~GraphBase() {
+    // free the attributes
+    for (auto& pair : v_attr_) {
+      for (auto a : pair.second) {
+        delete a;
+      }
+      pair.second.clear();
+    }
+    for (auto& pair : e_attr_) {
+      for (auto a : pair.second) {
+        delete a;
+      }
+      pair.second.clear();
+    }
+  }
+
   virtual std::vector<int> getNeighbors(int v) = 0;
   virtual int addEdge(std::pair<int, int> edge) = 0;
   virtual int addVertex() = 0;
@@ -66,8 +82,16 @@ class GraphBase {
           "number of provided attribute values must match number of vertices");
     }
 
-    std::vector<Attribute*> attrs;
-    v_attr_[name] = attrs;
+    // free attributes if already present, otherwise memroy leaks
+    if (v_attr_.count(name) != 0) {
+      for (auto a : v_attr_[name]) {
+        delete a;
+      }
+      v_attr_[name].clear();
+    } else {
+      std::vector<Attribute*> attrs;
+      v_attr_[name] = attrs;
+    }
 
     for (auto val : values) {
       v_attr_[name].push_back(new AttributeValue<T>(val));
@@ -128,8 +152,16 @@ class GraphBase {
           "number of provided attribute values must match number of edges");
     }
 
-    std::vector<Attribute*> attrs;
-    v_attr_[name] = attrs;
+    // free attributes if already present, otherwise memroy leaks
+    if (e_attr_.count(name) != 0) {
+      for (auto a : e_attr_[name]) {
+        delete a;
+      }
+      e_attr_[name].clear();
+    } else {
+      std::vector<Attribute*> attrs;
+      e_attr_[name] = attrs;
+    }
 
     for (auto val : values) {
       e_attr_[name].push_back(new AttributeValue<T>(val));

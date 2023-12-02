@@ -26,6 +26,27 @@ To facilitate different typed vertex and edge attributes, I created a base `Attr
 Because of these templated attribute features, the `GraphBase` is provided in the `include/graph_base.h` header file, allowing maximum flexibility in terms of user defined Vertex and Edge attribute types!
 To provide differentiation between directed and undirected graphs, I define to-from as the row and from-to as the column. Therefore, in a undirected class the row and column at a particular index are equal, but this is not necessarily true for a directed graph unless all edges are explicitly created in both directions.
 
+Since I am managing complex structures with pointers to objects on the heap (and intentionally not using smart pointers since the graph class should own all this memory), I used Valgrind to check for memory leaks. After finding that I need to ensure the attribute pointers are deleted when overriding their values, my final memcheck output shows no leaks!
+
+```
+(base) [cjpeh test]$ valgrind --leak-check=yes ../bin/test_graph_al_directed
+==9079== Memcheck, a memory error detector
+==9079== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==9079== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==9079== Command: ../bin/test_graph_al_directed
+==9079==
+ALL TESTS PASSED
+==9079==
+==9079== HEAP SUMMARY:
+==9079==     in use at exit: 0 bytes in 0 blocks
+==9079==   total heap usage: 398 allocs, 398 frees, 86,028 bytes allocated
+==9079==
+==9079== All heap blocks were freed -- no leaks are possible
+==9079==
+==9079== For lists of detected and suppressed errors, rerun with: -s
+==9079== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+```
+
 
 #### 1.1.1
 

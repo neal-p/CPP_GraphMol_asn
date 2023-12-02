@@ -3,9 +3,9 @@
 // Base class for attributes
 class Attribute {
  public:
-    virtual ~Attribute() = default;
-    virtual Attribute* clone() = 0;
-    virtual void print() = 0;
+  virtual ~Attribute() = default;
+  virtual Attribute* clone() = 0;
+  virtual void print() = 0;
 };
 
 // Template class for vertex and edge attributes
@@ -17,14 +17,7 @@ class AttributeValue : public Attribute {
   AttributeValue(const T& val) : value(val) {}
   AttributeValue() : value() {}
 
+  void print() override { std::cout << value; }
 
-    void print() override {
-        std::cout << value;
-    }
-
-    AttributeValue<T>* clone() override {
-        return new AttributeValue<T>();
-    }
+  AttributeValue<T>* clone() override { return new AttributeValue<T>(); }
 };
-
-
