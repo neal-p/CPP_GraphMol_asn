@@ -73,6 +73,9 @@ test_distmat: test_distmat.cpp
 	-I$(UINC_DIR) \
 	$(ULIB_DIR)/libmymetrics.a
 
+plot_distmat: ../bin/distmat_timings.csv
+	python ../util/plot.py -i ../bin/distmat_timings.csv -x "V" -y "time" --label_by="e" --x_label="V" --y_label="Time" -o ../bin/distmat_timings.png
+
 
 
 all: $(TESTS)

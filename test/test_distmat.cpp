@@ -1,44 +1,51 @@
 #include <math.h>
+#include <random>
 #include "graph_al.h"
 #include "timings.h"
 
-void add_random_edge(Graph_AL& g) {
+void add_random_edges(Graph_AL& g, int E) {
   int V = g.getNVertices();
-  int v1 = rand() % V;
-  int v2 = rand() % V;
 
-  while (g.getEdgeBetween(v1, v2) != -1) {
-    v1 = rand() % V;
-    v2 = rand() % V;
+  std::vector<std::pair<int, int>> possible_edges;
+  possible_edges.reserve(V * V);
+
+  for (int i = 0; i < V; i++) {
+    for (int j = 0; j < V; j++) {
+      possible_edges.push_back(std::make_pair(i, j));
+    }
   }
 
-  g.addEdge(v1, v2);
+  // shuffle the order to get random edges
+  auto rng = std::default_random_engine{};
+  std::shuffle(possible_edges.begin(), possible_edges.end(), rng);
+
+  for (int i = 0; i < E; i++) {
+    g.addEdge(possible_edges[i]);
+  }
 }
 
 Graph_AL generate_graph(int V, int E) {
   Graph_AL g(V, {});
 
-  for (int i = 0; i < E; i++) {
-    add_random_edge(g);
-  }
+  add_random_edges(g, E);
 
   return g;
 }
 
 int main() {
-  std::cout << "V,E,time" << std::endl;
+  std::cout << "V,e,E,time" << std::endl;
 
-  std::vector<int> Vs{10, 100, 1000, 10000, 100000};
-  std::vector<float> Es{1.0, 1.2, 1.4};
+  std::vector<int> Vs{10, 20, 30, 40, 50, 100, 500, 1000, 5000};
+  std::vector<float> es{1.0, 1.2, 1.4, 1.8, 2.0};
 
   for (auto V : Vs) {
-    for (auto E : Es) {
-      int e = std::pow(V, E);
-      Graph_AL g = generate_graph(V, e);
+    for (auto e : es) {
+      int E = std::pow(V, e);
+      Graph_AL g = generate_graph(V, E);
 
       auto time = time_function([&g]() { g.getDistanceMatrix(); });
 
-      std::cout << V << "," << e << "," << time << std::endl;
+      std::cout << V << "," << e << "," << E << "," << time << std::endl;
     }
   }
 

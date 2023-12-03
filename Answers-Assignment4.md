@@ -223,10 +223,20 @@ To support this theoretical analysis, I ran a set of tests to compare how increa
 
 I initially tried using the ethane and octane examples, but they were too small to yield meaningful differences. Therefore, I left the use of those provided graphs simply as tests that the graph structure is correct and created the following test for analysing the time complexity:
 
-    - increase V from 10 to 100,000
-    - increase E from 1V to V^2
+    - increase V from 10 to 5,000
+    - increase E as a function of V by E = v^e with e from 1 to 2
 
-When deciding which edges to create, I simply generated two random numbers in the range of `V`.
+To construct each graph, I first made a vector of all possible edge pairs, then shuffled that vector, and took the first `E` pairings to make the edges. This should give more reasonable results than putting all the edges on the beginning indicies of the graph, for example.
+
+The `test_distmat` target is provided in the `tests/Makefile` to run the series of calculations. The distance matrix calculation is preformed 3 times per graph to ensure accurate measurement.
+
+Below, I plot the time in microseconds as a function of `V`, where the different curve are colored by the `e` value defined above. Therefore, we can see both how the number of vertices and number of edges affect the complexitiy:
+
+![distance matrix calculation](bin/distmat_timings.png)
+
+Indeed, we see the expected time increase with respect to `V` is moderate, but the affect of `E` is dramatic! Clearly, the BFS term is highly dependent on `E` and again as we saw in the analysis above, it is O(V + E), but when approaching the complete graph that becomes O(V + V^2), dramatically increasing the time complexity.
+At `V=5000` with a sparse matrix the computation is faster than `V=500` with the complete graph! This helps cement what we learned before, which is the number of edges is proportional to the number of iterations in our inner loop and has a dramatic affect on the BFS algorithm's performance.
+
 
 
 
