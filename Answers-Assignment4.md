@@ -68,6 +68,8 @@ The test can be found in `test/test_graph_al_directed.cpp`, `test/test_graph_al_
 
 All tests can me compiled to executable files placed in the `bin` directory by invoking the makefiles `all` target. There are assert statements throughout the test programs that will test for proper conditions. If all tests pass, `ALL TESTS PASSED` will be printed and the program will return `0`. 
 
+After these initial tests and after implementing the BFS, I returned here to also add tests for parsing the ethane and octane example graphs. These can be found at `test/test_ethane.cpp` and `test/test_octane.cpp`. These check the proper parsing of the molecular structure with the known bonds and distance matrix.
+
 #### 1.1.4
 
 The two classes `Graph_AM` and `Graph_AL` both accomplish the same graph operations, but they have contrasting strengths and weaknesses in terms of memory and temporal efficiency.
@@ -216,6 +218,15 @@ While the time complexity analysis is non-intuative with the solution of O(V + E
     - all_accessible list with max size V
 
 Here, all spacial considerations are a function of the number of vertices in the graph. 
+
+To support this theoretical analysis, I ran a set of tests to compare how increasing the number of vertices and edges affected the distance matrix calculation times. 
+
+I initially tried using the ethane and octane examples, but they were too small to yield meaningful differences. Therefore, I left the use of those provided graphs simply as tests that the graph structure is correct and created the following test for analysing the time complexity:
+
+    - increase V from 10 to 100,000
+    - increase E from 1V to V^2
+
+When deciding which edges to create, I simply generated two random numbers in the range of `V`.
 
 
 

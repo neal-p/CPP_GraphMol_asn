@@ -19,20 +19,20 @@ CPPFLAGS    = -O3
 INC_DIR = ../include
 
 # The directory where the include files for utilities are stored
-UINC_DIR = ../utils/include
+UINC_DIR = ../util/include
 
 # The directory where Week 9's main library object files are stored
 LIB_DIR     = ../lib
 
 # The directory where the library object files for utilities are stored
-ULIB_DIR     = ../utils/lib
+ULIB_DIR     = ../util/lib
 
 # Executable programs
 BIN_DIR     = ../bin
 
 # The next line contains a list of executable object files 
 # created by this Makefile.
-TESTS = test_graph_al_directed test_graph_al_undirected test_graph_am_directed test_graph_am_undirected test_ethane test_octane
+TESTS = test_graph_al_directed test_graph_al_undirected test_graph_am_directed test_graph_am_undirected test_ethane test_octane test_distmat
 
 test_graph_al_directed: test_graph_al_directed.cpp
 	$(CPP) $(CPPFLAGS) test_graph_al_directed.cpp \
@@ -65,6 +65,13 @@ test_octane: test_octane.cpp
 	$(CPP) $(CPPFLAGS) test_octane.cpp \
 	-o $(BIN_DIR)/test_octane \
 	-I$(INC_DIR) \
+
+test_distmat: test_distmat.cpp
+	$(CPP) $(CPPFLAGS) test_distmat.cpp \
+	-o $(BIN_DIR)/test_distmat \
+	-I$(INC_DIR) \
+	-I$(UINC_DIR) \
+	$(ULIB_DIR)/libmymetrics.a
 
 
 

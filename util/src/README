@@ -1,0 +1,16 @@
+# University of California, Berkeley
+# Chem 274B: Software Engineering Fundamentals for Molecular Sciences
+# September 2023
+# 
+# Creator:  Patrick Neal
+# Date Created: 12-02-2023
+# Last Updated: 12-02-2023
+# Directory Path: util/src
+
+LIST OF SUBDIRECTORIES IN THIS DIRECTORY:
+(no subdirectories)
+
+LIST OF FILES IN THIS DIRECTORY:
+- README: (this file) contains general information of this directory
+- timings.cpp: timing source
+- Makefile: target for making timing library
