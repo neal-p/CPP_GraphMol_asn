@@ -32,6 +32,18 @@ if __name__ == "__main__":
         help="the column(s) used for the y axis",
     )
     parser.add_argument(
+        "--x_scale",
+        type=str,
+        default="linear",
+        help="the scale for the x axis",
+    )
+    parser.add_argument(
+        "--y_scale",
+        type=str,
+        default="linear",
+        help="the scale for the y axis",
+    )
+    parser.add_argument(
         "--y_label", type=str, default=None, help="the label for the y-axis"
     )
     parser.add_argument(
@@ -119,6 +131,9 @@ if __name__ == "__main__":
 
     ##############################
     # Either show or save results
+
+    plt.xscale(args.x_scale)
+    plt.yscale(args.y_scale)
 
     if args.output is None:
         plt.show()
