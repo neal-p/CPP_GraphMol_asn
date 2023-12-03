@@ -141,6 +141,82 @@ See 1.4
 
 ## 1.4 Algorithmic Analysis
 
+To compute the distance matrix, we must first allocate space for our distances, then execute the `BFS` on each vertex:
 
-THIS IS IMPORTANT DO LAST
+```
+all_distances = NxN matrix                        // c1, executed 1 time, allocate space for NxN distance matrix
+
+for vertex_id in length(graph):                   // c2, executed N + 1 times, loop over every vertex in graph 
+
+    distances = graph.BFS(vertex_id)              // c3, exeecuted N times, do the BFS
+
+    all_distances[vertex] = distances             // c4, executed N times, move/insert distances to vertex_id into matrix
+
+```
+
+Therefore, first we must determine the complexity of BFS to understand the complexity of computing the distance matrix. 
+
+The BFS algorithm is as follows:
+
+```
+set all vertex colors to white                             // c1, executed N times, set each initial 'unseen' color
+set all vertex distances to nil                            // c2, executed N times, set each initial distances
+set all vertex pi to -1                                    // c3, executed N times, set each initial parent to non-vertex
+
+set vertex V color to grey                                 // c1, executed 1 time, set our query vertex to grey
+set vertex V distance to 0                                 // c2, exeucted 1 time, set self-distance
+
+create queue Q                                             // c4, executed 1 time, set up empty queue
+Q.push(V)                                                  // c5, executed 1 time, add element to queue
+
+while Q is not empty:                                      // c6, executed at most N+1 times, iterate until queue is empty
+    vertex = Q.pop()                                       // c7, executed at most N times, get top of queue
+    for each neighbor of vertex:                           // c8, executed at most N - 1 times, get neighbors with adj list is O(1)
+        color = get color of neighbor                      // c9, executed at most N * (N - 1) times, get neighbors color
+        if color == white:                                 // c10, executed at most N * (N - 1) times, if unseen
+            set neighor's color to grey                    // c1, executed at most N - 2 times, set as seen (already seen our query V, so N-2)
+            set neighbor's distance = vertex distance + 1  // c2, executed at most N - 2 times, lookup distance and set it
+            set neighbor's pi to vertex                    // c3, executed at most N - 2 times, set parent
+            Q.push(neighbor)                               // c5, executed at most N - 2 times, add to queue
+    set vertex color to black                              // c1 executed at most N times, mark that we should not come back
+
+all_accessible = new vector                                // c11, executed 1 time, get array to store accessible vertices
+for color in graph vertex colors:                          // c9 , executed N + 1 times, iterate over each vertex's color
+    if color == black:                                     // c12, executed N times, if color is back, then we reached that node
+        all_accessible.push_back(vertex)                   // c13, executed at most N times, add accessible node to our list
+
+```
+
+Here I have analyzed solely the as a function of `N` vertices, therefore the maximum number of edges is `N-1`. Therefore, we can sum the constants as a function of `n` to yield:
+`complexity = c1(3n) + c2(2n) + c3(2n) + c4(1) + c5(n) + c6(n+1) + c7(n) + c8(n) + c9(n^2) + c10(n^2) + c11(1) + c12(n) + c12(n) + c13(n)`
+
+The dominant term is the `n^2` term that comes from the worst case scenario of a complete graph wherein every time we query the neighbors it returns a list of all other vertices. This means that we are looking up the color and testing whether that color is white `n^2` times.
+
+A more accurate description though is based not only on the number of vertices, but also on the number of edges since the case of a complete graph is not very common.
+
+We can reframe this to be more applicable to normal graph use by declaring `V=number of vertices` and `E=number of edges`. Then, the above demonstrates when `E = V^2`. However, for a less densely connected graph we actually see that we still must visit each vertex, O(V). But, the number of neighbors to iterate over is proportional to the number of edges in the graph. 
+
+In a directed graph, we will always only travel along an edge one time to get to the neighbor on the other side, and enqueue that neighbor. In other words, the inner for loop runs once for each edge, making the total number of iterations of the inner loop proportional to the number of edges. In an undirected graph since we can move either direction along an edge, we will travel each edge twice. But, still the number of iterations of the inner loop is still proportional to the number of edges `E`. 
+
+Combining the queueing of `V` vertices with the visiting of each of the `E` edges yields a complexity of O(E + V). 
+
+We can re-capitualte the original analysis by substituting `E = V-1` into O(E + V), giving O(V^2 + V) = O(V^2) as we saw in the worst case of a complete graph. 
+
+Now, returning to the original question of the distance matrix computation, we see that the BFS is executed N times. Now that we know the BFS is O(n^2) for a complete graph, we can see the calculation of distance matrix will be N * N^2 or O(n^3).
+
+Again, we can reframe to more accurately reflect the graphs we are dealing with and rephrase this as iterating over `V` vertices, or V * (V + E), leading to a complexity of O(V^2 + VE).
+
+While the time complexity analysis is non-intuative with the solution of O(V + E) and took a while to come to, the spacial analysis is much more straight forward. The following memory allocations are requested during the BFS:
+
+    - array size V to hold colors
+    - array size V to hold distances 
+    - array size V to hold pi
+    - queue with max size of V-1
+    - neighbor list with max size V
+    - all_accessible list with max size V
+
+Here, all spacial considerations are a function of the number of vertices in the graph. 
+
+
+
 
